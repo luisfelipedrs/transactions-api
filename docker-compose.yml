@@ -1,0 +1,36 @@
+version: "3.5"
+services:
+  hyperf-transactions-api:
+    container_name: transactions-api
+    image: hyperf/hyperf:8.2-alpine-vedge-swoole
+    working_dir: /app
+    entrypoint: ["php", "bin/hyperf.php", "server:watch"]
+    volumes:
+      - ./:/app
+    ports:
+      - "9501:9501"
+    depends_on:
+      - hyperf-mariadb
+      - hyperf-redis
+
+  hyperf-mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: transactions_db
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  hyperf-redis:
+    container_name: hyperf-redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+volumes:
+  mariadb_data:
