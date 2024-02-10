@@ -10,8 +10,8 @@ use App\Domain\Entity\Wallet;
 class UserAccount
 {
     public function __construct(
-        private readonly User $user,
-        private readonly Wallet $wallet
+        public readonly User $user,
+        public readonly Wallet $wallet
     ) {}
 
     public function export(): array
