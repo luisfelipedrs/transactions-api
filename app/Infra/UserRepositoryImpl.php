@@ -7,6 +7,7 @@ namespace App\Infra;
 use App\Application\Helper\Mapper\UserMapper;
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepository;
+use App\Exception\ResourceNotFoundException;
 use App\Infra\Model\UserModel;
 use InvalidArgumentException;
 
@@ -29,7 +30,18 @@ class UserRepositoryImpl implements UserRepository
         $userModel = UserModel::where('external_id', $externalId)->first();
 
         if (!$userModel) {
-            throw new InvalidArgumentException("Usuário não encontrado.");
+            $this->throwUserNotFoundException();
+        }
+
+        return $this->userMapper->toDomain($userModel);
+    }
+
+    public function findByInternalId(int $id): User
+    {
+        $userModel = UserModel::where('id', $id)->first();
+
+        if (!$userModel) {
+            $this->throwUserNotFoundException();
         }
 
         return $this->userMapper->toDomain($userModel);
@@ -44,5 +56,10 @@ class UserRepositoryImpl implements UserRepository
         if (UserModel::where('document', $user->document->value)->first()) {
             throw new InvalidArgumentException('Documento já cadastrado.');
         }
+    }
+
+    private function throwUserNotFoundException(): void
+    {
+        throw new ResourceNotFoundException("Usuário não encontrado.");
     }
 }

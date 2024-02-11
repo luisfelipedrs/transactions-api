@@ -10,4 +10,5 @@ interface UserRepository
 {
     public function save(User $user): User;
     public function findById(string $externalId): User;
+    public function findByInternalId(int $internalId): User;
 }
