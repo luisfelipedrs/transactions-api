@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 
 use App\Controller\UserController;
-use App\Controller\WalletController;
+use App\Controller\TransactionController;
 use Hyperf\HttpServer\Router\Router;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
@@ -23,9 +23,7 @@ Router::addGroup('/users', function () {
     Router::post('/{id}/deposit', [UserController::class, 'handleDeposit']);
 });
 
-// wallet
-// Router::addGroup('/wallet', function () {
-//     Router::post('', [WalletController::class, 'handleOperation']);
-//     Router::get('/{id}', [WalletController::class, 'findWalletById']);
-//     Router::get('/user/{id}', [WalletController::class, 'findWalletByUserId']);
-// });
+// transaction
+Router::addGroup('/transactions', function () {
+    Router::post('', [TransactionController::class, 'makeTransaction']);
+});
