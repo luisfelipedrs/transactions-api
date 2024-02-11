@@ -7,8 +7,8 @@ namespace App\Infra;
 use App\Application\Helper\Mapper\WalletMapper;
 use App\Domain\Entity\Wallet;
 use App\Domain\Repository\WalletRepository;
+use App\Exception\ResourceNotFoundException;
 use App\Infra\Model\WalletModel;
-use InvalidArgumentException;
 
 class WalletRepositoryImpl implements WalletRepository
 {
@@ -26,7 +26,10 @@ class WalletRepositoryImpl implements WalletRepository
     public function update(Wallet $wallet): Wallet
     {
         $walletModel = WalletModel::find($wallet->id->value);
-        $this->checkIfWalletExists($walletModel);
+        
+        if (!$walletModel) {
+            $this->throwWalletNotFoundException();
+        };
         
         $walletModel->balance = $wallet->balance->value;
         $walletModel->save();
@@ -36,21 +39,27 @@ class WalletRepositoryImpl implements WalletRepository
     public function findById(int $id): Wallet
     {
         $walletModel = WalletModel::find($id);
-        $this->checkIfWalletExists($walletModel);
+
+        if (!$walletModel) {
+            $this->throwWalletNotFoundException();
+        };
+
         return $this->walletMapper->toDomain($walletModel);
     }
 
     public function findByUserId(int $walletUserId): Wallet
     {
         $walletModel = WalletModel::where('user_id', $walletUserId)->first();
-        $this->checkIfWalletExists($walletModel);
+
+        if (!$walletModel) {
+            $this->throwWalletNotFoundException();
+        }
+
         return $this->walletMapper->toDomain($walletModel);
     }
 
-    private function checkIfWalletExists(WalletModel $walletModel): void
+    private function throwWalletNotFoundException(): void
     {
-        if (!$walletModel) {
-            throw new InvalidArgumentException("Carteira não encontrada.");
-        }
+        throw new ResourceNotFoundException("Carteira não encontrada.");
     }
 }
