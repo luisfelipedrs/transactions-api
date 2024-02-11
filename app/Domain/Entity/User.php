@@ -34,7 +34,7 @@ class User
             'email' => $this->email->value,
             'userType' => $this->userType->name,
             'userDocument' => $this->document->value,
-            'userDocumentType' => $this->documentType->value,
+            'userDocumentType' => $this->documentType->name,
         ];
     }
 }
