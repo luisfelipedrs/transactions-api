@@ -17,11 +17,21 @@ class CaseInsensitiveInRule implements Rule
 
     public function passes($attribute, $value): bool
     {
+        if (!is_string($value)) return false;
         return in_array(strtolower($value), $this->allowedValues);
     }
 
     public function message(): string
     {
-        return json_encode(['message' => 'O campo :attribute não é um valor válido.']);
+        return json_encode(['error' => 'O campo :attribute não é um valor válido. Opções: ' . $this->buildMessage() . '.']);
+    }
+
+    private function buildMessage(): string
+    {
+        $capitalizedArray = array_map(function ($word) {
+            return ucwords($word);
+        }, $this->allowedValues);
+
+        return join(", ", $capitalizedArray);
     }
 }
