@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+use App\Infra\Command\RetryNotificationCommand;
+
 /**
  * This file is part of Hyperf.
  *
@@ -10,4 +13,5 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
+    RetryNotificationCommand::class
 ];
