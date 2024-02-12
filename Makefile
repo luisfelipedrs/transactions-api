@@ -4,3 +4,5 @@ analyse:
 	@php vendor/bin/deptrac analyse --config-file=depfile.yaml
 tests:
 	@docker exec -it transactions-api composer test
+notify:
+	@docker exec -it transactions-api php bin/hyperf.php send:notification
