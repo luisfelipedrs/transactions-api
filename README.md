@@ -30,12 +30,6 @@ Desenvolvimento de API Rest para uma aplicação de transações monetárias com
 - DB_PASSWORD=
 - DB_CHARSET=
 - DB_COLLATION=
-- DB_PREFIX=
-
-- REDIS_HOST=
-- REDIS_AUTH=
-- REDIS_PORT=
-- REDIS_DB=
 
 - AUTHORIZATION_SERVICE=
 - NOTIFICATION_SERVICE=
