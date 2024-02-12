@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: "Transactions Api"
+  version: "0.1"
+servers:
+  - url: "http://localhost:9501"
+paths:
+  /transactions:
+    post:
+      summary: "Realiza uma nova transação"
+      description: "Realiza uma nova transação com base nos parâmetros fornecidos"
+      operationId: 7aefb323f7f67a2acfbebf0e019f54d7
+      requestBody:
+        description: "Objeto de transação"
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                payer:
+                  description: "ID do pagador"
+                  type: string
+                  format: uuid
+                payee:
+                  description: "ID do beneficiário"
+                  type: string
+                  format: uuid
+                value:
+                  description: "Valor da transação (por exemplo: '10.00')"
+                  type: string
+                  format: decimal
+              type: object
+      responses:
+        "201":
+          description: "Transação realizada com sucesso"
+        "404":
+          description: "Recurso não encontrado"
+        "422":
+          description: "Entidade não processável"
+  /users:
+    post:
+      summary: "Cria um novo usuário"
+      description: "Cria um novo usuário com base nos parâmetros fornecidos"
+      operationId: 3b67b56d9233165263f1d5b2678078d7
+      requestBody:
+        description: "Objeto de usuário"
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                userType:
+                  description: "Tipo de usuário (por exemplo: 'common' ou 'seller')"
+                  type: string
+                name:
+                  description: "Nome do usuário"
+                  type: string
+                email:
+                  description: "Endereço de e-mail do usuário"
+                  type: string
+                  format: email
+                password:
+                  description: "Senha do usuário"
+                  type: string
+                documentType:
+                  description: "Tipo de documento (por exemplo: 'cnpj' ou 'cpf')"
+                  type: string
+                document:
+                  description: "Número do documento (por exemplo: '32618735000170')"
+                  type: string
+              type: object
+      responses:
+        "201":
+          description: "Usuário cadastrado com suceso"
+        "404":
+          description: "Usuário não encontrado"
+        "422":
+          description: "Entidade não processável"
+  /users/{id}/deposit:
+    post:
+      summary: "Realiza um depósito na carteira do usuário"
+      description: "Realiza um novo depósito com base nos parâmetros fornecidos"
+      operationId: c44593fced947d77cd39df1ec0d51277
+      parameters:
+        - name: id
+          in: path
+          description: "ID do usuário"
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: "Objeto de valor da transação"
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                value:
+                  description: "Valor da transação (por exemplo: '500.00')"
+                  type: string
+                  format: decimal
+              type: object
+      responses:
+        "201":
+          description: "Depósito realizado com sucesso"
+        "404":
+          description: "Usuário não encontrado"
+        "422":
+          description: "Entidade não processável"
+  /users/{id}:
+    get:
+      summary: "Busca um usuário pelo UUID"
+      description: "Busca um usuário pelo UUID"
+      operationId: 79228dda6f2f4324f8514ed2ece305c6
+      parameters:
+        - name: id
+          in: path
+          description: "ID do usuário"
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: "Dados do usuário"
+        "404":
+          description: "Usuário não encontrado"
