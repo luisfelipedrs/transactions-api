@@ -1,39 +1,56 @@
-# Introduction
+## ❯ Projeto
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+Desenvolvimento de API Rest para uma aplicação de transações monetárias com endpoints para realizar transações, cadastrar usuários e depositar valores em suas carteiras.
 
-# Requirements
+### Tecnologias utilizadas
 
-Hyperf has some requirements for the system environment, it can only run under Linux and Mac environment, but due to the development of Docker virtualization technology, Docker for Windows can also be used as the running environment under Windows.
+- PHP
+- Hyperf Framework
+- MySQL
+- Docker
+- Swagger OpenApi
+- Testes com PHPUnit
 
-The various versions of Dockerfile have been prepared for you in the [hyperf/hyperf-docker](https://github.com/hyperf/hyperf-docker) project, or directly based on the already built [hyperf/hyperf](https://hub.docker.com/r/hyperf/hyperf) Image to run.
+## ❯ Começando
 
-When you don't want to use Docker as the basis for your running environment, you need to make sure that your operating environment meets the following requirements:  
+### Step 1: Configurar ambiente
 
- - PHP >= 8.0
- - Any of the following network engines
-   - Swoole PHP extension >= 4.5，with `swoole.use_shortname` set to `Off` in your `php.ini`
-   - Swow PHP extension (Beta)
- - JSON PHP extension
- - Pcntl PHP extension
- - OpenSSL PHP extension （If you need to use the HTTPS）
- - PDO PHP extension （If you need to use the MySQL Client）
- - Redis PHP extension （If you need to use the Redis Client）
- - Protobuf PHP extension （If you need to use the gRPC Server or Client）
+## Clonar esse repositório
 
-# Installation using Composer
+## Criar arquivo .env com as seguintes propriedades, que estão também no .env.example:
 
-The easiest way to create a new Hyperf project is to use Composer. If you don't have it already installed, then please install as per the documentation.
+- APP_NAME=
+- APP_ENV=
 
-To create your new Hyperf project:
+- DB_DRIVER=
+- DB_HOST=
+- DB_PORT=
+- DB_DATABASE=
+- DB_USERNAME=
+- DB_PASSWORD=
+- DB_CHARSET=
+- DB_COLLATION=
+- DB_PREFIX=
 
-$ composer create-project hyperf/hyperf-skeleton path/to/install
+- REDIS_HOST=
+- REDIS_AUTH=
+- REDIS_PORT=
+- REDIS_DB=
 
-Once installed, you can run the server immediately using the command below.
+- AUTHORIZATION_SERVICE=
+- NOTIFICATION_SERVICE=
 
-$ cd path/to/install
-$ php bin/hyperf.php start
+### Step 2: Subir aplicação
 
-This will start the cli-server on port `9501`, and bind it to all network interfaces. You can then visit the site at `http://localhost:9501/`
+```bash
+docker-compose up -d --build
+```
 
-which will bring up Hyperf default home page.
+## ❯ Endpoints
+
+| Route                | Description                                                        |
+| -------------------- | ------------------------------------------------------------------ |
+| **/api/v1/users**    | POST - Cadastra um novo usuário, junto com sua carteira            |
+| **/api/v1/users/id** | GET - Busca um usuário pelo seu Uuid                               |
+| **/api/v1/users/id/deposit** | POST - Deposita um valor na carteira do usuário            |
+| **/api/v1/transactions** | POST - Realiza uma transação entre dois usuários               |
