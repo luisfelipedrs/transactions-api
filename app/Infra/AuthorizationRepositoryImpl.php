@@ -20,6 +20,6 @@ class AuthorizationRepositoryImpl implements AuthorizationRepository
             ->getBody()
             ->getContents();
 
-        return json_decode($response)->message === 'Autorizado' ? true : false;
+        return json_decode($response)->message === 'Autorizado';
     }
 }
