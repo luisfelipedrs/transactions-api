@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Domain\ValueObject\User\UserEmail;
+use App\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 
 class UserEmailTest extends TestCase
@@ -15,7 +16,7 @@ class UserEmailTest extends TestCase
 
     public function testInvalidEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('E-mail inválido.');
 
         new UserEmail('invalid_email');
@@ -23,7 +24,7 @@ class UserEmailTest extends TestCase
 
     public function testEmptyEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('E-mail inválido.');
 
         new UserEmail('');

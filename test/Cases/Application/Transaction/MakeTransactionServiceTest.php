@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use App\Application\Usecase\Transaction\MakeTransactionUseCase;
-use App\Application\Usecase\User\CreateUserAccountUseCase;
-use App\Application\Usecase\User\FindUserAccountUseCase;
 use App\Domain\Aggregate\UserAccount;
 use App\Domain\Entity\Transaction;
 use App\Domain\Entity\User;
@@ -24,6 +22,7 @@ use App\Domain\ValueObject\User\UserType;
 use App\Domain\ValueObject\Wallet\WalletBalance;
 use App\Domain\ValueObject\Wallet\WalletId;
 use App\Domain\ValueObject\Wallet\WalletUserId;
+use App\Exception\ValidationException;
 use Hyperf\DbConnection\Db;
 
 class MakeTransactionServiceTest extends TestCase
@@ -139,7 +138,7 @@ class MakeTransactionServiceTest extends TestCase
 
     public function testFailedTransaction(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage("Saldo insuficiente para realizar a transação.");
 
         $this->transactionRequest = [
@@ -165,7 +164,7 @@ class MakeTransactionServiceTest extends TestCase
 
     public function testSellerTransaction(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage("Usuários lojistas não podem realizar transferências.");
 
         $this->transactionRequest = [

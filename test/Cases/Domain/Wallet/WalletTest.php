@@ -7,6 +7,7 @@ use App\Domain\Entity\Wallet;
 use App\Domain\ValueObject\Wallet\WalletBalance;
 use App\Domain\ValueObject\Wallet\WalletId;
 use App\Domain\ValueObject\Wallet\WalletUserId;
+use App\Exception\ValidationException;
 
 class WalletTest extends TestCase
 {
@@ -32,7 +33,7 @@ class WalletTest extends TestCase
 
     public function testInvalidAddAmount(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage("O valor a ser adicionado deve ser maior que zero.");
 
         $wallet = new Wallet(new WalletUserId(1), new WalletBalance('100.50'));
@@ -41,7 +42,7 @@ class WalletTest extends TestCase
 
     public function testInvalidSubtractAmount(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage("O valor a ser subtraído deve ser maior que zero.");
 
         $wallet = new Wallet(new WalletUserId(1), new WalletBalance('100.50'));
@@ -50,7 +51,7 @@ class WalletTest extends TestCase
 
     public function testInsufficientFunds(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage("Saldo insuficiente para realizar a transação.");
 
         $wallet = new Wallet(new WalletUserId(1), new WalletBalance('100.50'));

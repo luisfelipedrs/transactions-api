@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\ValueObject\Shared\IdValueObject;
+use App\Exception\ValidationException;
 
 class IdValueObjectTest extends TestCase
 {
@@ -15,7 +16,7 @@ class IdValueObjectTest extends TestCase
 
     public function testInvalidIdZero(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('ID não pode ser menor ou igual a zero.');
 
         new IdValueObject(0);
@@ -23,7 +24,7 @@ class IdValueObjectTest extends TestCase
 
     public function testInvalidIdNegative(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('ID não pode ser menor ou igual a zero.');
 
         new IdValueObject(-1);

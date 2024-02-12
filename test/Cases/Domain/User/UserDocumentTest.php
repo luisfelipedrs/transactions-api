@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domain\ValueObject\User\DocumentType;
 use App\Domain\ValueObject\User\UserDocument;
+use App\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 
 class UserDocumentTest extends TestCase
@@ -19,7 +20,7 @@ class UserDocumentTest extends TestCase
 
     public function testInvalidCpfLength(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('CPF inválido.');
 
         $cpf = '12345678904545454';
@@ -37,7 +38,7 @@ class UserDocumentTest extends TestCase
 
     public function testInvalidCnpjLength(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('CNPJ inválido.');
 
         $cnpj = '123456789012';
