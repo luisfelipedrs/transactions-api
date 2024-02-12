@@ -21,6 +21,11 @@ class Transaction
         public ?TransactionId $id = null,
     ) {}
 
+    public function isTransactionExecuted(): bool
+    {
+        return $this->status === TransactionStatus::EXECUTED;
+    }
+
     public function changeTransactionStatus(Transaction $transaction, TransactionStatus $transactionStatus): self
     {
         return new Transaction(

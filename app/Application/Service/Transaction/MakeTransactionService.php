@@ -18,8 +18,8 @@ use App\Domain\ValueObject\Shared\UuidGenerator;
 use App\Domain\ValueObject\Transaction\TransactionAmount;
 use App\Domain\ValueObject\Transaction\TransactionStatus;
 use App\Domain\ValueObject\User\UserType;
-use Exception;
 use InvalidArgumentException;
+use Throwable;
 
 class MakeTransactionService implements MakeTransactionUseCase
 {
@@ -48,6 +48,9 @@ class MakeTransactionService implements MakeTransactionUseCase
         $payeeWallet = $this->walletRepository->findById($payeeUser->id->value);
         $payeeUserAccount = new UserAccount($payeeUser, $payeeWallet);
 
+        $payerWallet = $payerWallet->subtractFromBalance($transactionAmount);
+        $payeeWallet = $payeeWallet->addToBalance($transactionAmount);
+
         $transaction = new Transaction(
             $payerUserAccount,
             $payeeUserAccount,
@@ -59,24 +62,23 @@ class MakeTransactionService implements MakeTransactionUseCase
         $transaction = $this->transactionRepository->save($transaction);
 
         try {
-            $payerWallet = $payerWallet->subtractFromBalance($transactionAmount);
-            $payeeWallet = $payeeWallet->addToBalance($transactionAmount);
-
             $this->validateTransactionAuthorization();
 
-            $this->walletRepository->update($payerWallet);
-            $this->walletRepository->update($payeeWallet);
+            $this->walletRepository->makeTransaction($payerWallet, $payeeWallet);
     
             $transaction = $transaction->changeTransactionStatus($transaction, TransactionStatus::EXECUTED);
             $transaction = $this->transactionRepository->update($transaction);
-
-            $this->sendNotificationUseCase->execute($transaction);
-            return $transaction;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $transaction = $transaction->changeTransactionStatus($transaction, TransactionStatus::ERROR);
             $this->transactionRepository->update($transaction);
             throw $e;
         }
+
+        if ($transaction->isTransactionExecuted()) {
+            $this->sendNotificationUseCase->execute($transaction);
+        }
+
+        return $transaction;
     }
 
     private function validateTransaction(array $transactionRequest): void

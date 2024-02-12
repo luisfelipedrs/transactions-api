@@ -9,6 +9,8 @@ use App\Domain\Entity\Wallet;
 use App\Domain\Repository\WalletRepository;
 use App\Exception\ResourceNotFoundException;
 use App\Infra\Model\WalletModel;
+use Hyperf\DbConnection\Db;
+use Throwable;
 
 class WalletRepositoryImpl implements WalletRepository
 {
@@ -34,6 +36,20 @@ class WalletRepositoryImpl implements WalletRepository
         $walletModel->balance = $wallet->balance->value;
         $walletModel->save();
         return $this->walletMapper->toDomain($walletModel);
+    }
+
+    public function makeTransaction(Wallet $payerWallet, Wallet $payeeWallet): void
+    {
+        try {
+            Db::transaction(function () use ($payerWallet, $payeeWallet) {
+                $payerWallet = $this->update($payerWallet);
+                $payeeWallet = $this->update($payeeWallet);
+                Db::commit();
+            });
+        } catch (Throwable $e) {
+            Db::rollBack();
+            throw $e;
+        }
     }
 
     public function findById(int $id): Wallet

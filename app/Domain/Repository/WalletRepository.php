@@ -12,4 +12,5 @@ interface WalletRepository
     public function update(Wallet $wallet): Wallet;
     public function findById(int $id): Wallet;
     public function findByUserId(int $id): Wallet;
+    public function makeTransaction(Wallet $payerWallet, Wallet $payeeWallet): void;
 }
