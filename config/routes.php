@@ -17,13 +17,13 @@ use Hyperf\HttpServer\Router\Router;
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
 // user
-Router::addGroup('/users', function () {
+Router::addGroup('/api/v1/users', function () {
     Router::post('', [UserController::class, 'createUser']);
     Router::get('/{id}', [UserController::class, 'findUserById']);
     Router::post('/{id}/deposit', [UserController::class, 'handleDeposit']);
 });
 
 // transaction
-Router::addGroup('/transactions', function () {
+Router::addGroup('/api/v1/transactions', function () {
     Router::post('', [TransactionController::class, 'makeTransaction']);
 });
