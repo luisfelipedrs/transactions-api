@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ValueObject\User;
 
 use App\Domain\ValueObject\User\DocumentType;
+use App\Exception\ValidationException;
 
 class UserDocument
 {
@@ -29,14 +30,14 @@ class UserDocument
     private function validateCpf(): void
     {
         if (strlen($this->value) !== 11) {
-            throw new \InvalidArgumentException('CPF inválido.');
+            throw new ValidationException('CPF inválido.');
         }
     }
 
     private function validateCnpj(): void
     {
         if (strlen($this->value) !== 14) {
-            throw new \InvalidArgumentException('CNPJ inválido.');
+            throw new ValidationException('CNPJ inválido.');
         }
     }
 }

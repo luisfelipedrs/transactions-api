@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\Shared;
 
+use App\Exception\ValidationException;
+
 class IdValueObject
 {
     public function __construct(
@@ -15,7 +17,7 @@ class IdValueObject
     private function validate(): void
     {
         if ($this->value <= 0) {
-            throw new \InvalidArgumentException('ID não pode ser menor ou igual a zero.');
+            throw new ValidationException('ID não pode ser menor ou igual a zero.');
         }
     }
 }

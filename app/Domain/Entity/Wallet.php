@@ -7,6 +7,7 @@ namespace App\Domain\Entity;
 use App\Domain\ValueObject\Wallet\WalletBalance;
 use App\Domain\ValueObject\Wallet\WalletId;
 use App\Domain\ValueObject\Wallet\WalletUserId;
+use App\Exception\ValidationException;
 
 class Wallet
 {
@@ -33,18 +34,18 @@ class Wallet
     private function validateBeforeAdd(string $amount): void
     {
         if (bccomp($amount, '0', 2) <= 0) {
-            throw new \InvalidArgumentException("O valor a ser adicionado deve ser maior que zero.");
+            throw new ValidationException("O valor a ser adicionado deve ser maior que zero.");
         }
     }
 
     private function validateBeforeSubtract(string $amount): void
     {
         if (bccomp($amount, '0', 2) <= 0) {
-            throw new \InvalidArgumentException("O valor a ser subtraído deve ser maior que zero.");
+            throw new ValidationException("O valor a ser subtraído deve ser maior que zero.");
         }
 
         if (!$this->balance->hasEnoughFunds($amount)) {
-            throw new \InvalidArgumentException("Saldo insuficiente para realizar a transação.");
+            throw new ValidationException("Saldo insuficiente para realizar a transação.");
         }
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject\User;
 
+use App\Exception\ValidationException;
+
 class UserEmail
 {
     public function __construct(
@@ -15,7 +17,7 @@ class UserEmail
     private function validate(): void
     {
         if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('E-mail inválido.');
+            throw new ValidationException('E-mail inválido.');
         }
     }
 }

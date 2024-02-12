@@ -13,10 +13,10 @@ namespace App\Exception\Handler;
 
 use App\Constants\HttpStatus;
 use App\Exception\ResourceNotFoundException;
+use App\Exception\ValidationException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -32,7 +32,7 @@ class AppExceptionHandler extends ExceptionHandler
             'error' => $throwable->getMessage(),
         ];
 
-        if ($throwable instanceof InvalidArgumentException) {
+        if ($throwable instanceof ValidationException) {
             return $response->withHeader('Content-Type', 'application/json')
                 ->withStatus(HttpStatus::UNPROCESSABLE_ENTITY)
                 ->withBody(new SwooleStream(json_encode($data)));

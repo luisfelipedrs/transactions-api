@@ -18,7 +18,7 @@ use App\Domain\ValueObject\Shared\UuidGenerator;
 use App\Domain\ValueObject\Transaction\TransactionAmount;
 use App\Domain\ValueObject\Transaction\TransactionStatus;
 use App\Domain\ValueObject\User\UserType;
-use InvalidArgumentException;
+use App\Exception\ValidationException;
 use Throwable;
 
 class MakeTransactionService implements MakeTransactionUseCase
@@ -95,21 +95,21 @@ class MakeTransactionService implements MakeTransactionUseCase
     private function validateSamePayerAndPayee(string $payerId, string $payeeId): void
     {
         if ($payerId === $payeeId) {
-            throw new InvalidArgumentException("O ID do pagador não pode ser o mesmo do beneficiário.");
+            throw new ValidationException("O ID do pagador não pode ser o mesmo do beneficiário.");
         }
     }
 
     private function validatePayerUserType(User $payerUser): void
     {
         if ($payerUser->userType === UserType::Seller) {
-            throw new InvalidArgumentException("Usuários lojistas não podem realizar transferências.");
+            throw new ValidationException("Usuários lojistas não podem realizar transferências.");
         }
     }
 
     private function validateTransactionAuthorization(): void
     {
         if (!$this->authorizationRepository->isAuthorized()) {
-            throw new InvalidArgumentException("Transação não autorizada.");
+            throw new ValidationException("Transação não autorizada.");
         }
     }
 }

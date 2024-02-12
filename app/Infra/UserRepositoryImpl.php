@@ -8,8 +8,8 @@ use App\Application\Helper\Mapper\UserMapper;
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepository;
 use App\Exception\ResourceNotFoundException;
+use App\Exception\ValidationException;
 use App\Infra\Model\UserModel;
-use InvalidArgumentException;
 
 class UserRepositoryImpl implements UserRepository
 {
@@ -50,11 +50,11 @@ class UserRepositoryImpl implements UserRepository
     private function validateUser(User $user): void
     {
         if (UserModel::where('email', $user->email->value)->first()) {
-            throw new InvalidArgumentException('E-mail já cadastrado.');
+            throw new ValidationException('E-mail já cadastrado.');
         }
         
         if (UserModel::where('document', $user->document->value)->first()) {
-            throw new InvalidArgumentException('Documento já cadastrado.');
+            throw new ValidationException('Documento já cadastrado.');
         }
     }
 
